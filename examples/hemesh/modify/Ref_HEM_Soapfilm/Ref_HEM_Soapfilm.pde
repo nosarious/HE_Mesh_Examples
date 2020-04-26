@@ -18,7 +18,8 @@ void setup() {
   mesh.selectBoundaryVertices("boundary");
   modifier=new HEM_Soapfilm().setIterations(10).setFixed(mesh.getSelection("boundary"));
   f=0;
-  A=mesh.getArea();
+  //A=mesh.getArea();
+  A = getSurfaceArea(mesh);
   render=new WB_Render(this);
 }
 
@@ -49,8 +50,18 @@ void draw() {
 
 void update() {
   mesh.modify(modifier); 
-  double nA=mesh.getArea();
+  //double nA=mesh.getArea();
+  double nA = getSurfaceArea(mesh);
   f=nA/A;
   println(f);
   A=nA;
+}
+
+double getSurfaceArea(HE_Mesh thisMesh){
+  double totalArea = 0.0;
+  HE_FaceIterator fitr=mesh.fItr();
+  while (fitr.hasNext()) {
+    totalArea += fitr.next().getFaceArea();
+  }
+  return totalArea;
 }
